@@ -27,7 +27,8 @@ class authController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'role' => 'customer'
         ]);
 
         return redirect('/login')->with('success', 'Akun berhasil dibuat');
@@ -44,7 +45,11 @@ class authController extends Controller
         ]);
 
         if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect('/');
+            if (Auth::user()->role == 'admin') {
+                return redirect("/admin/dashboard");
+            }
+
+            return redirect("/");
         }
 
         return back()->withErrors(['email' => 'Email atau password salah!']);

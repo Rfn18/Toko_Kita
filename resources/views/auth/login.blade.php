@@ -476,6 +476,7 @@
                 <div class="auth-footer">
                     Belum punya akun? <a href="{{ route('register') }}" id="toRegister">Daftar Sekarang</a>
                 </div>
+                <a href={{url("/")}}>Back</a>
             </div>
         </div>
     </div>

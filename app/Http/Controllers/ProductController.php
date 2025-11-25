@@ -22,15 +22,25 @@ class ProductController extends Controller
             'deskripsi'   => 'required',
             'harga'       => 'required|integer',
             'stok'        => 'required|integer',
-            'gambar'      => 'required',
+            'gambar'      => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $produk = Product::create($request->all());
+        $file = $request->file('gambar');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->storeAs('produk', $filename);
 
-        return response()->json([
-            'message' => 'Produk berhasil ditambahkan',
-            'data'    => $produk
+         $produk = Product::create([
+            'kategori_id' => $request->kategori_id,
+            'nama_produk' => $request->nama_produk,
+            'deskripsi'   => $request->deskripsi,
+            'harga'       => $request->harga,
+            'stok'        => $request->stok,
+            'gambar'      => $filename
         ]);
+
+        dd($request->file('gambar'));
+
+        return redirect()->route('admin.produk.index')->with('success', 'User created successfuly');
     }
 
     // Detail produk
