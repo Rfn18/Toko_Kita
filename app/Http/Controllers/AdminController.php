@@ -16,6 +16,7 @@ class AdminController extends Controller
         return view("admin.dashboard", compact('total_user', 'toal_product'));
     }
 
+    // Produk
     public function produk() {
         $produk = Product::all();
 
@@ -26,5 +27,12 @@ class AdminController extends Controller
         $kategori = Kategoris::all();
 
         return view("admin.produk.create", compact('kategori'));
+    }
+
+    // Kategori
+    public function kategori() {
+        $kategori = Kategoris::all();
+
+        return view("admin.kategori.index", compact('kategori'));
     }
 }

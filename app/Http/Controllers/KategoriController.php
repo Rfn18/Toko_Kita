@@ -46,8 +46,6 @@ class KategoriController extends Controller
     {
         Kategoris::destroy($id);
 
-        return response()->json([
-            'message' => 'Kategori berhasil dihapus'
-        ]);
+        return redirect()->route('admin.produk.index')->with('success', 'User Deleted Successfully');
     }
 }

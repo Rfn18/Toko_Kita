@@ -22,11 +22,11 @@
                 <span class="menu-icon">📊</span>
                 <span class="menu-text">Dashboard</span>
             </div>
-            <div class="menu-item active" data-page="products">
+            <div class="menu-item" data-page="products">
                 <span class="menu-icon">📦</span>
                 <span class="menu-text">Produk</span>
             </div>
-            <div class="menu-item" data-page="orders">
+            <div class="menu-item active" data-page="orders">
                 <span class="menu-icon">⭐</span>
                 <span class="menu-text">kategori</span>
             </div>
@@ -69,11 +69,11 @@
             </div>
 
             <div class="table-header">
-                <h2 class="chart-title">Daftar Produk</h2>
-                <a href="{{ url('/admin/produk/create') }}" style="text-decoration: none">
+                <h2 class="chart-title">Daftar Kategori</h2>
+                <a href="{{ url('/admin/kategori/create') }}" style="text-decoration: none">
                     <button class="btn-primary" id="btnAddProduct">
                         <span>➕</span>
-                        <span>Tambah Produk</span>
+                        <span>Tambah Kategori</span>
                     </button>
                 </a>
             </div>
@@ -82,28 +82,19 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Gambar</th>
-                            <th>Nama Produk</th>
-                            <th>Harga</th>
-                            <th>Stok</th>
-                            <th>Kategori</th>
-                            <th>Aksi</th>
+                            <th>No</th>
+                            <th>Nama Kategori</th>
                         </tr>
                     </thead>
                     <tbody id="productTableBody">
-                        @foreach ($produk as $p)
+                        @foreach ($kategori as $k)
                             <tr>
-                                <td>
-                                    <div class="product-image">{{ $p->gambar }}</div>
-                                </td>
-                                <td>{{ $p->nama_produk }}</td>
-                                <td>Rp {{ $p->harga }}</td>
-                                <td>{{ $p->stok }}</td>
-                                <td><span class="category-badge makanan">{{ $p->kategori_id }}</span></td>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $k->nama_kategori }}</td>
                                 <td>
                                     <div class="action-buttons">
                                         <button class="btn-action btn-edit">✏️ Edit</button>
-                                        <form action="{{ route('admin.produk.delete', $p->id) }}" method="POST">
+                                        <form action="{{ route('admin.kategori.delete', $k->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn-action btn-delete">🗑️

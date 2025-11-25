@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\AuthController;
+use App\Middleware\AdminMiddleware;
 
 Route::get('/', [ProductController::class, 'index'])->name('home');
 Route::apiResource('produk', ProductController::class);
@@ -28,6 +29,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {
      Route::get('/produk', [AdminController::class, 'produk'])->name('admin.produk.index');
      Route::get('/produk/create', [AdminController::class, 'createProduk'])->name('admin.produk.create');
      Route::post('/produk/create', [ProductController::class, 'store'])->name('admin.produk.store');;
+     Route::put('produk/edit/{id}', [ProductController::class, 'update'])->name('admin.produk.update');
+     Route::delete('produk/delete/{id}', [ProductController::class, 'destroy'])->name('admin.produk.delete');
+
+     // Kategori
+     Route::get('/kategori', [AdminController::class, 'kategori'])->name('admin.kategori.index');
+     Route::delete('kategori/delete/{id}', [KategoriController::class, 'destroy'])->name('admin.kategori.delete');
 });
 
 Route::apiResource('kategori', KategoriController::class);

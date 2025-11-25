@@ -67,8 +67,7 @@
             <div class="form-container">
                 <h2 class="form-title">Tambah Produk Baru</h2>
 
-                <form id="addProductForm" action="{{ route('admin.produk.store') }}" method="POST"
-                    enctype="multipart/form-data">
+                <form id="addProductForm" action="/admin/produk/create" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label class="form-label">Foto Produk <span class="required">*</span></label>
@@ -172,13 +171,21 @@
     imageUpload.addEventListener('drop', (e) => {
         e.preventDefault();
         imageUpload.classList.remove('dragover');
+
         const file = e.dataTransfer.files[0];
-        if (file && file.type.startsWith('image/')) {
+        if (file && file.type.startsWith("image/")) {
             handleImageUpload(file);
+
+            // supaya ikut terkirim saat submit
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            imageInput.files = dt.files;
         }
     });
 
+
     function handleImageUpload(file) {
+        console.log("FILE TERBACA:", file);
 
         const reader = new FileReader();
 

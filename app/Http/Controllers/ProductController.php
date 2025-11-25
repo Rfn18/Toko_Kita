@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProductController extends Controller
 {
@@ -15,19 +16,17 @@ class ProductController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {   
         $request->validate([
             'kategori_id' => 'required|exists:kategoris,id',
             'nama_produk' => 'required',
             'deskripsi'   => 'required',
             'harga'       => 'required|integer',
             'stok'        => 'required|integer',
-            'gambar'      => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'gambar' => 'required|image|max:5120'
         ]);
 
-        $file = $request->file('gambar');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $file->storeAs('produk', $filename);
+        $uploadedFileUrl = Cloudinary::upload($request->file('gambar')->getRealPath())->getSecurePath();
 
          $produk = Product::create([
             'kategori_id' => $request->kategori_id,
@@ -35,10 +34,8 @@ class ProductController extends Controller
             'deskripsi'   => $request->deskripsi,
             'harga'       => $request->harga,
             'stok'        => $request->stok,
-            'gambar'      => $filename
+            'gambar'      => $uploadedFileUrl
         ]);
-
-        dd($request->file('gambar'));
 
         return redirect()->route('admin.produk.index')->with('success', 'User created successfuly');
     }
@@ -69,8 +66,6 @@ class ProductController extends Controller
     {
         Product::destroy($id);
 
-        return response()->json([
-            'message' => 'Produk berhasil dihapus'
-        ]);
+        return redirect()->route('admin.produk.index')->with('success', 'User Deleted Successfully');
     }
 }

@@ -67,27 +67,10 @@
             <div class="form-container">
                 <h2 class="form-title">Tambah Produk Baru</h2>
 
-                <form id="addProductForm" action="/admin/produk/create" method="POST" enctype="multipart/form-data">
+                <form id="addProductForm" action="/admin/kategori/create" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label class="form-label">Foto Produk <span class="required">*</span></label>
-                        <div class="image-upload" id="imageUpload">
-                            <div class="upload-icon">📷</div>
-                            <div class="upload-text">
-                                <strong>Klik untuk upload</strong> atau drag & drop gambar di sini<br>
-                                <small>Format: JPG, PNG (Maks. 5MB)</small>
-                            </div>
-                            <input type="file" id="imageInput" accept="image/*" name="gambar"
-                                style="display: none;">
-                        </div>
-                        <div class="image-preview" id="imagePreview">
-                            <img id="previewImg" class="preview-image" src="" alt="Preview">
-                            <button type="button" class="remove-image" id="removeImage">🗑️ Hapus Gambar</button>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Nama Produk <span class="required">*</span></label>
+                        <label class="form-label">Nama Kategori <span class="required">*</span></label>
                         <input type="text" class="form-input" id="productName" name="nama_produk"
                             placeholder="Masukkan nama produk" required>
                     </div>
@@ -142,63 +125,5 @@
     xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
-<script>
-    // Image Upload - Add Product
-    const imageUpload = document.getElementById('imageUpload');
-    const imageInput = document.getElementById('imageInput');
-    const imagePreview = document.getElementById('imagePreview');
-    const previewImg = document.getElementById('previewImg');
-    const removeImage = document.getElementById('removeImage');
-
-    imageUpload.addEventListener('click', () => imageInput.click());
-
-    imageUpload.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        imageUpload.classList.add('dragover');
-    });
-
-    imageUpload.addEventListener('dragleave', () => {
-        imageUpload.classList.remove('dragover');
-    });
-
-    imageInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            handleImageUpload(file);
-        }
-    });
-
-    imageUpload.addEventListener('drop', (e) => {
-        e.preventDefault();
-        imageUpload.classList.remove('dragover');
-        const file = e.dataTransfer.files[0];
-        if (file && file.type.startsWith('image/')) {
-            handleImageUpload(file);
-        }
-    });
-
-    function handleImageUpload(file) {
-
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            previewImg.src = e.target.result;
-            imagePreview.classList.add('show');
-            imageUpload.style.display = 'none';
-        };
-
-        reader.readAsDataURL(file);
-
-        const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(file);
-        document.getElementById('imageInput').files = dataTransfer.files;
-    }
-
-    removeImage.addEventListener('click', () => {
-        imagePreview.classList.remove('show');
-        imageUpload.style.display = 'block';
-        imageInput.value = '';
-    });
-</script>
 
 </html>
