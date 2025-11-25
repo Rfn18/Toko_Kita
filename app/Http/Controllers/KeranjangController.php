@@ -31,6 +31,10 @@ class KeranjangController extends Controller
         ]);
     }
 
+    public function show() {
+        
+    }
+
     // Update jumlah item
     public function update(Request $request, $id)
     {
