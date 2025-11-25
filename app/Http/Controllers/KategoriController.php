@@ -20,10 +20,7 @@ class KategoriController extends Controller
 
         $kategori = Kategoris::create($request->all());
 
-        return response()->json([
-            'message' => 'Kategori berhasil ditambahkan',
-            'data'    => $kategori
-        ]);
+        return redirect()->route('admin.kategori.index')->with('success', 'Kategory Create Successfully');
     }
 
     public function show($id)
@@ -36,16 +33,13 @@ class KategoriController extends Controller
         $kategori = Kategoris::findOrFail($id);
         $kategori->update($request->all());
 
-        return response()->json([
-            'message' => 'Kategori berhasil diperbarui',
-            'data'    => $kategori
-        ]);
+         return redirect()->route('admin.kategori.index')->with('success', 'Kategory Updated Successfully');
     }
 
     public function destroy($id)
     {
         Kategoris::destroy($id);
 
-        return redirect()->route('admin.produk.index')->with('success', 'User Deleted Successfully');
+        return redirect()->route('admin.kategori.index')->with('success', 'Kategory Deleted Successfully');
     }
 }

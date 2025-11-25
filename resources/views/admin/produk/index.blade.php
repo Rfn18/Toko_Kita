@@ -18,18 +18,22 @@
             <div class="sidebar-title">TokoKita</div>
         </div>
         <div class="sidebar-menu">
-            <div class="menu-item " data-page="dashboard">
-                <span class="menu-icon">📊</span>
-                <span class="menu-text">Dashboard</span>
-            </div>
+            <a href="{{ url('/admin/dashboard') }}" style="text-decoration: none">
+                <div class="menu-item" data-page="dashboard">
+                    <span class="menu-icon">📊</span>
+                    <span class="menu-text">Dashboard</span>
+                </div>
+            </a>
             <div class="menu-item active" data-page="products">
                 <span class="menu-icon">📦</span>
                 <span class="menu-text">Produk</span>
             </div>
-            <div class="menu-item" data-page="orders">
-                <span class="menu-icon">⭐</span>
-                <span class="menu-text">kategori</span>
-            </div>
+            <a href="{{ url('/admin/kategori') }}" style="text-decoration: none">
+                <div class="menu-item" data-page="orders">
+                    <span class="menu-icon">⭐</span>
+                    <span class="menu-text">kategori</span>
+                </div>
+            </a>
             <div class="menu-item" data-page="reports">
                 <span class="menu-icon">📈</span>
                 <span class="menu-text">Laporan</span>
@@ -94,15 +98,19 @@
                         @foreach ($produk as $p)
                             <tr>
                                 <td>
-                                    <div class="product-image">{{ $p->gambar }}</div>
+                                    <div class="product-image"><img src="{{ asset('storage/' . $p->gambar) }}"
+                                            alt="gambar" style="width: 100%; border-radius: 10px"></div>
                                 </td>
                                 <td>{{ $p->nama_produk }}</td>
                                 <td>Rp {{ $p->harga }}</td>
                                 <td>{{ $p->stok }}</td>
-                                <td><span class="category-badge makanan">{{ $p->kategori_id }}</span></td>
+                                <td><span class="category-badge makanan">{{ $p->kategori->nama_kategori }}</span>
+                                </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn-action btn-edit">✏️ Edit</button>
+                                        <a href="{{ route('admin.produk.edit', $p->id) }}">
+                                            <button class="btn-action btn-edit">✏️ Edit</button>
+                                        </a>
                                         <form action="{{ route('admin.produk.delete', $p->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')

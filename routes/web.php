@@ -28,12 +28,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {
      // Produk
      Route::get('/produk', [AdminController::class, 'produk'])->name('admin.produk.index');
      Route::get('/produk/create', [AdminController::class, 'createProduk'])->name('admin.produk.create');
+     Route::get('/produk/{id}/edit', [ProductController::class, 'edit'])->name('admin.produk.edit');
      Route::post('/produk/create', [ProductController::class, 'store'])->name('admin.produk.store');;
      Route::put('produk/edit/{id}', [ProductController::class, 'update'])->name('admin.produk.update');
      Route::delete('produk/delete/{id}', [ProductController::class, 'destroy'])->name('admin.produk.delete');
 
      // Kategori
      Route::get('/kategori', [AdminController::class, 'kategori'])->name('admin.kategori.index');
+     Route::post('/kategori/create', [KategoriController::class, 'store'])->name('admin.kategori.store');;
+     Route::put('/kategori/update/{id}', [KategoriController::class, 'update'])->name('admin.kategori.update');;
      Route::delete('kategori/delete/{id}', [KategoriController::class, 'destroy'])->name('admin.kategori.delete');
 });
 

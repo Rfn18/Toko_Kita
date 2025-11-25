@@ -19,18 +19,24 @@
             <div class="sidebar-title">TokoKita</div>
         </div>
         <div class="sidebar-menu">
-            <div class="menu-item " data-page="dashboard">
-                <span class="menu-icon">📊</span>
-                <span class="menu-text">Dashboard</span>
-            </div>
-            <div class="menu-item active" data-page="products">
-                <span class="menu-icon">📦</span>
-                <span class="menu-text">Produk</span>
-            </div>
-            <div class="menu-item" data-page="orders">
-                <span class="menu-icon">⭐</span>
-                <span class="menu-text">kategori</span>
-            </div>
+            <a href="{{ url('/admin/dashboard') }}" style="text-decoration: none">
+                <div class="menu-item " data-page="dashboard">
+                    <span class="menu-icon">📊</span>
+                    <span class="menu-text">Dashboard</span>
+                </div>
+            </a>
+            <a href="{{ url('/admin/produk') }}" style="text-decoration: none">
+                <div class="menu-item active" data-page="products">
+                    <span class="menu-icon">📦</span>
+                    <span class="menu-text">Produk</span>
+                </div>
+            </a>
+            <a href="{{ url('/admin/kategori') }}" style="text-decoration: none">
+                <div class="menu-item" data-page="orders">
+                    <span class="menu-icon">⭐</span>
+                    <span class="menu-text">kategori</span>
+                </div>
+            </a>
             <div class="menu-item" data-page="reports">
                 <span class="menu-icon">📈</span>
                 <span class="menu-text">Laporan</span>
@@ -67,8 +73,10 @@
             <div class="form-container">
                 <h2 class="form-title">Tambah Produk Baru</h2>
 
-                <form id="addProductForm" action="/admin/produk/create" method="POST" enctype="multipart/form-data">
+                <form id="addProductForm" action="{{ 'admin.produk.update', $produk->id }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
                     <div class="form-group">
                         <label class="form-label">Foto Produk <span class="required">*</span></label>
                         <div class="image-upload" id="imageUpload">
@@ -80,8 +88,9 @@
                             <input type="file" id="imageInput" accept="image/*" name="gambar"
                                 style="display: none;">
                         </div>
-                        <div class="image-preview" id="imagePreview">
-                            <img id="previewImg" class="preview-image" src="" alt="Preview">
+                        <div class="image-preview show" id="imagePreview">
+                            <img id="previewImg" class="preview-image " src="{{ asset('storage/' . $produk->gambar) }}"
+                                alt="Preview">
                             <button type="button" class="remove-image" id="removeImage">🗑️ Hapus Gambar</button>
                         </div>
                     </div>
@@ -89,7 +98,7 @@
                     <div class="form-group">
                         <label class="form-label">Nama Produk <span class="required">*</span></label>
                         <input type="text" class="form-input" id="productName" name="nama_produk"
-                            placeholder="Masukkan nama produk" required>
+                            value="{{ $produk->nama_produk }}" placeholder="Masukkan nama produk" required>
                     </div>
 
                     <div class="form-group">
@@ -97,7 +106,9 @@
                         <select class="form-select" name="kategori_id" id="productCategory" required>
                             <option value="">Pilih Kategori</option>
                             @foreach ($kategori as $k)
-                                <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
+                                <option value="{{ $k->id }}"
+                                    {{ $k->id == $produk->kategori_id ? 'selected' : '' }}>
+                                    {{ $k->nama_kategori }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -105,24 +116,26 @@
                     <div class="form-group">
                         <label class="form-label">Harga <span class="required">*</span></label>
                         <input type="number" class="form-input" name="harga" id="productPrice"
-                            placeholder="Masukkan Harga">
+                            value="{{ $produk->harga }}" placeholder="Masukkan Harga">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Stok <span class="required">*</span></label>
                         <input type="number" class="form-input" id="productStock" name="stok"
-                            placeholder="Masukkan jumlah stok" required min="0">
+                            placeholder="Masukkan jumlah stok" value="{{ $produk->stok }}" required min="0">
                         <div class="error-message" id="stockError">Stok tidak boleh kosong atau bernilai negatif!
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Deskripsi</label>
-                        <textarea class="form-textarea" id="productDescription" name="deskripsi"
+                        <textarea class="form-textarea" id="productDescription" name="deskripsi" value="{{ $produk->deskripsi }}"
                             placeholder="Jelaskan detail produk Anda..."></textarea>
                     </div>
 
                     <div class="form-actions">
-                        <button type="button" class="btn-secondary" onclick="cancelAddProduct()">Batal</button>
+                        <a href="{{ url('/admin/produk/') }}">
+                            <button type="button" class="btn-secondary">Batal</button>
+                        </a>
                         <button type="submit" class="btn-primary">💾 Simpan Produk</button>
                     </div>
                 </form>

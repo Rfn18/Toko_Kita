@@ -11,15 +11,15 @@ class AdminController extends Controller
 {
     public function index() {
         $total_user = User::count();
-        $toal_product = Product::count();
+        $total_product = Product::count();
+        $total_stok = Product::sum('stok');
 
-        return view("admin.dashboard", compact('total_user', 'toal_product'));
+        return view("admin.dashboard", compact('total_user', 'total_product', 'total_stok'));
     }
 
     // Produk
     public function produk() {
-        $produk = Product::all();
-
+        $produk = Product::with('kategori')->get();
         return view("admin.produk.index", compact('produk'));
     }
 

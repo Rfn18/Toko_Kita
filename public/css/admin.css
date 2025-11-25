@@ -577,7 +577,7 @@ body {
 }
 
 /* Modal */
-.modal {
+/* .modal {
     display: none;
     position: fixed;
     top: 0;
@@ -588,7 +588,7 @@ body {
     z-index: 2000;
     align-items: center;
     justify-content: center;
-}
+} */
 
 .modal.show {
     display: flex;

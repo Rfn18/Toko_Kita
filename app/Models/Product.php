@@ -22,7 +22,7 @@ class Product extends Model
 
     public function kategori()
     {
-        return $this->belongsTo(Product::class, 'kategori_id');
+        return $this->belongsTo(Kategoris::class, 'kategori_id');
     }
 
     public function keranjang()

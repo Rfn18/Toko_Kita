@@ -135,7 +135,7 @@
         box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
     }
 
-    .main-image {
+    .main-image img {
         width: 100%;
         height: 500px;
         background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
@@ -143,6 +143,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        object-fit: cover;
+        object-position: center;
         font-size: 200px;
         margin-bottom: 20px;
     }
@@ -744,34 +746,32 @@
         <!-- Left Side - Images -->
         <div class="left-side">
             <div class="image-slider">
-                <div class="main-image" id="mainImage">🍪</div>
+                <div class="main-image" id="mainImage"><img src="{{ asset('storage/' . $produk->gambar) }}"
+                        alt="foto-produk"></div>
                 <div class="thumbnail-container">
-                    <div class="thumbnail active" data-emoji="🍪">🍪</div>
-                    <div class="thumbnail" data-emoji="📦">📦</div>
-                    <div class="thumbnail" data-emoji="🏷️">🏷️</div>
-                    <div class="thumbnail" data-emoji="🎁">🎁</div>
+                    <div class="thumbnail active" data-emoji="1">1</div>
                 </div>
             </div>
         </div>
         <div class="right-side">
             <div class="breadcrumb">
-                <a href="#">Home</a> / <a href="#">Makanan & Minuman</a> / <a href="#">Kue Kering</a>
-                / <span>Kue Kering Premium</span>
+                <a href="/">Home</a> / <a href="#">{{ $produk->kategori->nama_kategori }}</a>
+                /<span>{{ $produk->nama_produk }}</span>
             </div>
 
-            <span class="category-badge">Makanan & Minuman</span>
+            <span class="category-badge">{{ $produk->kategori->nama_kategori }}</span>
 
-            <h1 class="product-name">{{ $product->nama_produk }}</h1>
+            <h1 class="product-name">{{ $produk->nama_produk }}</h1>
 
             <div class="rating-section">
                 <p>5 Terjual</p>
             </div>
 
             <div class="price-section">
-                <div class="product-price">Rp {{ number_format($product->harga) }}</div>
+                <div class="product-price">Rp {{ number_format($produk->harga) }}</div>
                 <div class="price-details">
                     <span class="original-price">Rp
-                        {{ number_format($product->harga + $product->harga * 0.3) }}</span>
+                        {{ number_format($produk->harga + $produk->harga * 0.3) }}</span>
                     <span class="discount-badge">HEMAT 30%</span>
                 </div>
             </div>
@@ -779,7 +779,7 @@
             <div class="description-section">
                 <div class="section-title">Deskripsi Produk</div>
                 <p class="description-text">
-                    {{ $product->deskripsi }}
+                    {{ $produk->deskripsi }}
                 </p>
             </div>
 

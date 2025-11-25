@@ -19,18 +19,24 @@
             <div class="sidebar-title">TokoKita</div>
         </div>
         <div class="sidebar-menu">
-            <div class="menu-item " data-page="dashboard">
-                <span class="menu-icon">📊</span>
-                <span class="menu-text">Dashboard</span>
-            </div>
-            <div class="menu-item active" data-page="products">
-                <span class="menu-icon">📦</span>
-                <span class="menu-text">Produk</span>
-            </div>
-            <div class="menu-item" data-page="orders">
-                <span class="menu-icon">⭐</span>
-                <span class="menu-text">kategori</span>
-            </div>
+            <a href="{{ url('/admin/dashboard') }}" style="text-decoration: none">
+                <div class="menu-item " data-page="dashboard">
+                    <span class="menu-icon">📊</span>
+                    <span class="menu-text">Dashboard</span>
+                </div>
+            </a>
+            <a href="{{ url('/admin/produk') }}" style="text-decoration: none">
+                <div class="menu-item active" data-page="products">
+                    <span class="menu-icon">📦</span>
+                    <span class="menu-text">Produk</span>
+                </div>
+            </a>
+            <a href="{{ url('/admin/kategori') }}" style="text-decoration: none">
+                <div class="menu-item" data-page="orders">
+                    <span class="menu-icon">⭐</span>
+                    <span class="menu-text">kategori</span>
+                </div>
+            </a>
             <div class="menu-item" data-page="reports">
                 <span class="menu-icon">📈</span>
                 <span class="menu-text">Laporan</span>

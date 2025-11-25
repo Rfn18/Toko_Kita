@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Kategori;
+use App\Models\Kategoris;
 use Illuminate\Http\Request;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
@@ -23,19 +24,27 @@ class ProductController extends Controller
             'deskripsi'   => 'required',
             'harga'       => 'required|integer',
             'stok'        => 'required|integer',
-            'gambar' => 'required|image|max:5120'
+            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:5120'
         ]);
 
-        $uploadedFileUrl = Cloudinary::upload($request->file('gambar')->getRealPath())->getSecurePath();
+        if ($request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            
+            // Generate nama file unik
+            $filename = time() . '_' . $file->getClientOriginalName();
+            
+            // Simpan ke storage/app/public/products
+            $path = $file->storeAs('produk', $filename, 'public');
+        }
 
-         $produk = Product::create([
-            'kategori_id' => $request->kategori_id,
-            'nama_produk' => $request->nama_produk,
-            'deskripsi'   => $request->deskripsi,
-            'harga'       => $request->harga,
-            'stok'        => $request->stok,
-            'gambar'      => $uploadedFileUrl
-        ]);
+        $produk = new Product();
+        $produk->nama_produk = $request->nama_produk;
+        $produk->kategori_id = $request->kategori_id;
+        $produk->harga = $request->harga;
+        $produk->stok = $request->stok;
+        $produk->deskripsi = $request->deskripsi;
+        $produk->gambar = $path; 
+        $produk->save();
 
         return redirect()->route('admin.produk.index')->with('success', 'User created successfuly');
     }
@@ -43,9 +52,17 @@ class ProductController extends Controller
     // Detail produk
     public function show($id)
     {
-        $product = Product::with('kategori')->findOrFail($id);
+        $produk = Product::with('kategori')->findOrFail($id);
 
-        return view('products.detail', compact('product'));;
+        return view('products.detail', compact('produk'));;
+    }
+
+      public function edit(string $id)
+    {
+        $produk = Product::find($id);
+        $produks = Product::where('id', '!=', $id)->get();
+        $kategori = Kategoris::all();
+        return view('admin.produk.edit', compact('produk', 'produks', 'kategori'));
     }
 
     // Update produk
