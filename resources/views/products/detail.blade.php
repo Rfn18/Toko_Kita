@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" rel="stylesheet">
     <title>{{ config('app.name', 'Laravel') }}</title>
@@ -731,14 +732,30 @@
                 <span class="search-icon">🔍</span>
             </div>
         </div>
-        <div class="header-right">
-            <div class="header-icon">❤️</div>
-            <div class="header-icon cart-icon">
-                🛒
-                <span class="cart-badge">3</span>
+        @auth
+            <div class="header-right">
+                <a href="{{ url('/keranjang') }}" style='text-decoration: none;'>
+                    <div class="header-icon cart-icon">
+                        🛒
+                        <span class="cart-badge">3</span>
+                    </div>
+                </a>
+                <a href="{{ url('/profile') }}" style='text-decoration: none;'>
+                    <div class="header-icon">👤</div>
+                </a>
             </div>
-            <div class="header-icon">👤</div>
-        </div>
+        @else
+            <div class="header-right">
+
+                <div class="header-icon cart-icon">
+                    🛒
+                    <span class="cart-badge">3</span>
+                </div>
+
+                <div class="header-icon">👤</div>
+
+            </div>
+        @endauth
     </div>
 
     <!-- Main Container -->
@@ -800,15 +817,29 @@
                     <button class="qty-btn" id="increaseBtn">+</button>
                 </div>
             </div>
+            @auth
+                <input type="hidden" id="productId" value="{{ $produk->id }}">
 
-            <div class="action-buttons">
-                <button class="action-btn add-to-cart-btn" id="addToCartBtn">
-                    🛒 Tambah ke Keranjang
-                </button>
-                <button class="action-btn buy-now-btn" id="buyNowBtn">
-                    Beli Sekarang
-                </button>
-            </div>
+                <div class="action-buttons">
+                    <button class="action-btn add-to-cart-btn" id="addToCartBtn">
+                        🛒 Tambah ke Keranjang
+                    </button>
+                    <button class="action-btn buy-now-btn" id="buyNowBtn">
+                        Beli Sekarang
+                    </button>
+                </div>
+            @else
+                <div class="action-buttons">
+                    <a href="{{ url('/login') }}" style="text-decoration: none">
+                        <button class="action-btn add-to-cart-btn" id="addToCartBtn">
+                            🛒 Tambah ke Keranjang
+                        </button>
+                    </a>
+                    <button class="action-btn buy-now-btn" id="buyNowBtn">
+                        Beli Sekarang
+                    </button>
+                </div>
+            @endauth
 
             <div class="features-section">
                 <div class="feature-item">
@@ -866,5 +897,53 @@
         </div>
     </div>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const decreaseBtn = document.getElementById("decreaseBtn");
+        const increaseBtn = document.getElementById("increaseBtn");
+        const qtyValue = document.getElementById("qtyValue");
+        const addToCartBtn = document.getElementById("addToCartBtn");
+        const productId = document.getElementById("productId").value;
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+        // === Increment ===
+        increaseBtn.addEventListener("click", () => {
+            let qty = parseInt(qtyValue.textContent);
+            qtyValue.textContent = qty + 1;
+        });
+
+        // === Decrement ===
+        decreaseBtn.addEventListener("click", () => {
+            let qty = parseInt(qtyValue.textContent);
+            if (qty > 1) qtyValue.textContent = qty - 1;
+        });
+
+        // === Add To Cart ===
+        addToCartBtn.addEventListener("click", () => {
+
+            const qty = parseInt(qtyValue.textContent);
+
+            fetch("/keranjang/addMany", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        qty: qty
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    alert("Berhasil masuk keranjang (" + qty + " pcs)");
+                })
+                .catch(err => console.error(err));
+        });
+
+    });
+</script>
 
 </html>

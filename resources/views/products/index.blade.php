@@ -1,6 +1,18 @@
 @extends('template.master')
 
 @section('content')
+    @if (session('success') || session('error'))
+        <div class="toast show" id="toast">
+            <span class="toast-icon" id="toastIcon">
+                {{ session('success') ? '✓' : '❌' }}
+            </span>
+
+            <span class="toast-message" id="toastMessage">
+                {{ session('success') ?? session('error') }}
+            </span>
+        </div>
+    @endif
+
     <!-- Main Content -->
     <div class="container">
         <!-- Banner Promo -->
@@ -17,24 +29,20 @@
         <h3 class="section-title">Kategori Produk</h3>
         <div class="categories">
             <div class="category-card">
-                <div class="category-icon">🍔</div>
-                <div class="category-name">Jersey</div>
+                <div class="category-icon">👕</div>
+                <div class="category-name">Kaos</div>
             </div>
             <div class="category-card">
-                <div class="category-icon">☕</div>
+                <div class="category-icon">🧥</div>
+                <div class="category-name">Hoodie</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">🥼</div>
                 <div class="category-name">Jaket</div>
             </div>
             <div class="category-card">
-                <div class="category-icon">👕</div>
-                <div class="category-name">Topi</div>
-            </div>
-            <div class="category-card">
-                <div class="category-icon">🎨</div>
+                <div class="category-icon">👟</div>
                 <div class="category-name">Sepatu</div>
-            </div>
-            <div class="category-card">
-                <div class="category-icon">🏠</div>
-                <div class="category-name">Kaos</div>
             </div>
         </div>
 
@@ -51,7 +59,11 @@
                             <div class="product-sold">
                                 {{ $p->stok }} barang tersedia</span>
                             </div>
-                            <button class="add-to-cart">+ Keranjang</button>
+                            <form action="{{ route('customer.keranjang.store') }}" method="POST" class="addToCard">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $p->id }}">
+                                <button type="submit" class="add-to-cart">+ Keranjang</button>
+                            </form>
                         </div>
                     </div>
                 </a>

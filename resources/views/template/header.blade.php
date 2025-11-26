@@ -339,6 +339,51 @@
         .categories {
             grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
         }
+
+        .addToCard {
+            z-index: 999;
+        }
+    }
+
+    /* Toast */
+    .toast {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        background: white;
+        padding: 16px 24px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        align-items: center;
+        gap: 12px;
+        z-index: 2000;
+        animation: slideInRight 0.3s;
+    }
+
+    .toast.show {
+        display: flex;
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(400px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .toast-icon {
+        font-size: 24px;
+    }
+
+    .toast-message {
+        font-size: 14px;
+        font-weight: 500;
+        color: #2c3e50;
     }
 </style>
 </head>
@@ -352,9 +397,11 @@
                 <input type="text" placeholder="Cari produk UMKM...">
                 <span class="search-icon">🔍</span>
             </div>
-            <div class="cart-icon">
-                🛒
-                <span class="cart-badge">3</span>
-            </div>
+            @auth
+                <div class="cart-icon">
+                    🛒
+                    <span class="cart-badge">3</span>
+                </div>
+            @endauth
         </div>
     </div>

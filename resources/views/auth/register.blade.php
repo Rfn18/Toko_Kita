@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <title>TokoKita - Masuk & Daftar</title>
     <style>
         * {
@@ -280,8 +281,11 @@
 
         /* Footer Link */
         .auth-footer {
+            display: flex;
+            flex-direction: column;
             text-align: center;
             margin-top: 30px;
+            gap: 10px;
             font-size: 15px;
             color: #666;
         }
@@ -356,6 +360,16 @@
             animation: spin 0.8s linear infinite;
         }
 
+
+        .back {
+            justify-self: start;
+        }
+
+        .back i {
+            margin-right: .5em;
+        }
+
+
         @keyframes spin {
             to {
                 transform: rotate(360deg);
@@ -369,11 +383,14 @@
                 justify-content: space-around;
             }
 
+
             .logo-section {
                 position: sticky;
-                top: 20%;
+                align-self: start;
+                top: 30%;
                 height: 100dvh;
             }
+
 
             .container {
                 display: flex;
@@ -502,7 +519,12 @@
                 </button>
 
                 <div class="auth-footer">
-                    Sudah punya akun? <a href={{ route('login') }} id="toLogin">Masuk</a>
+                    <span>
+                        Sudah punya akun? <a href={{ route('login') }} id="toLogin">Masuk</a>
+                    </span>
+                    <a href={{ url('/') }} class="back"><i
+                            class="fa-solid fa-arrow-down
+                            fa-rotate-90"></i>Back</a>
                 </div>
             </div>
         </div>

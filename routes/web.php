@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Middleware\AdminMiddleware;
 
 Route::get('/', [ProductController::class, 'index'])->name('home');
@@ -40,5 +41,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {
      Route::delete('kategori/delete/{id}', [KategoriController::class, 'destroy'])->name('admin.kategori.delete');
 });
 
+Route::middleware(['auth'])->group(function() {
+     // Keranjang
+     Route::get("/keranjang", [KeranjangController::class, 'index'])->name('customer.keranjang');
+     Route::post('/keranjang/add', [KeranjangController::class, 'store'])->name('customer.keranjang.store');
+     Route::post('/keranjang/addMany', [KeranjangController::class, 'tambahBanyak'])->name('customer.keranjang.storeMany');
+     Route::put('/keranjang/min/{id}', [KeranjangController::class, 'minJumlah'])->name('customer.keranjang.min');
+     Route::delete('/keranjang/delete/{id}', [KeranjangController::class, 'destroy'])->name('customer.keranjang.delete');
+
+     // Profile
+     Route::get("/profile", [UserController::class, 'index'])->name('customer.profile');
+});
+
 Route::apiResource('kategori', KategoriController::class);
-Route::apiResource('keranjang', KeranjangController::class);
