@@ -9,7 +9,8 @@ class KategoriController extends Controller
 {
     public function index()
     {
-        return response()->json(Kategoris::all());
+        $kategori = Kategoris::all();
+        return view("products.kategori.index", compact('kategori'));
     }
 
     public function store(Request $request)

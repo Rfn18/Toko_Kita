@@ -73,7 +73,7 @@
             <div class="form-container">
                 <h2 class="form-title">Tambah Produk Baru</h2>
 
-                <form id="addProductForm" action="{{ 'admin.produk.update', $produk->id }}" method="POST"
+                <form id="addProductForm" action="{{ route('admin.produk.update', $produk->id) }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -128,8 +128,8 @@
 
                     <div class="form-group">
                         <label class="form-label">Deskripsi</label>
-                        <textarea class="form-textarea" id="productDescription" name="deskripsi" value="{{ $produk->deskripsi }}"
-                            placeholder="Jelaskan detail produk Anda..."></textarea>
+                        <textarea class="form-textarea" id="productDescription" name="deskripsi" value="{{ $produk->deskripsi }}" required
+                            placeholder="Jelaskan detail produk Anda...">{{ $produk->deskripsi }}</textarea>
                     </div>
 
                     <div class="form-actions">

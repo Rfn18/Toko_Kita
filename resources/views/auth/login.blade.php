@@ -412,6 +412,47 @@
         font-size: 100px;
         opacity: 0.9;
     }
+
+    /* Toast */
+    .toast {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        background: white;
+        padding: 16px 24px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        align-items: center;
+        gap: 12px;
+        z-index: 2000;
+        animation: slideInRight 0.3s;
+    }
+
+    .toast.show {
+        display: flex;
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(400px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .toast-icon {
+        font-size: 24px;
+    }
+
+    .toast-message {
+        font-size: 14px;
+        font-weight: 500;
+        color: #2c3e50;
+    }
 </style>
 
 <body>
@@ -421,6 +462,17 @@
         <p class="auth-subtitle">Selamat datang kembali! Silakan masuk ke akun Anda.</p>
     </div>
     <div class="container">
+        @if (session('success') || session('error'))
+            <div class="toast show" id="toast">
+                <span class="toast-icon" id="toastIcon">
+                    {{ session('success') ? '✓' : '❌' }}
+                </span>
+
+                <span class="toast-message" id="toastMessage">
+                    {{ session('success') ?? session('error') }}
+                </span>
+            </div>
+        @endif
         <!-- Login Page -->
         <div class="page active" id="loginPage">
             <div class="auth-card">

@@ -31,7 +31,8 @@ class AdminController extends Controller
 
     // Kategori
     public function kategori() {
-        $kategori = Kategoris::all();
+        $kategori =  Kategoris::withCount('products')->get();
+  
 
         return view("admin.kategori.index", compact('kategori'));
     }

@@ -20,7 +20,6 @@
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: #f8f9fa;
-        /* padding: 30px; */
     }
 
 
@@ -41,10 +40,6 @@
         align-items: center;
     }
 
-    .header-left {
-        display: block
-    }
-
     .header-left h1 {
         font-size: 28px;
         color: #2c3e50;
@@ -55,6 +50,22 @@
         color: #666;
         font-size: 15px;
     }
+
+    .header-lefts {
+        display: block
+    }
+
+    .header-lefts h1 {
+        font-size: 28px;
+        color: #2c3e50;
+        margin-bottom: 8px;
+    }
+
+    .header-lefts p {
+        color: #666;
+        font-size: 15px;
+    }
+
 
     .btn-add-category {
         background: linear-gradient(135deg, #4a90e2 0%, #67b5f5 100%);
@@ -653,6 +664,17 @@
 </style>
 
 <body>
+    @if (session('success') || session('error'))
+        <div class="toast show" id="toast">
+            <span class="toast-icon" id="toastIcon">
+                {{ session('success') ? '✓' : '❌' }}
+            </span>
+
+            <span class="toast-message" id="toastMessage">
+                {{ session('success') ?? session('error') }}
+            </span>
+        </div>
+    @endif
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">🏪</div>
@@ -686,27 +708,7 @@
         </div>
     </div>
     <div class="main-content">
-        <div class="header">
-            <div class="header-left">
-                <div class="toggle-sidebar" id="toggleSidebar">☰</div>
-                <h1 class="page-title" id="pageTitle">Dashboard</h1>
-            </div>
-            <div class="header-right">
-                <div class="notification-icon">
-                    🔔
-                    <span class="notification-badge">3</span>
-                </div>
-                <div class="dropdown">
-                    <div class="user-profile" data-bs-toggle="dropdown">
-                        <div class="user-avatar">👤</div>
-                        <div class="user-name">Admin UMKM</div>
-                    </div>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        @include('admin.header')
         <div class="content page" id="productsPage">
             <div class="success-banner" id="successBanner">
                 <span class="success-banner-icon">✓</span>
@@ -715,7 +717,7 @@
 
 
             <div class="page-header">
-                <div class="header-left">
+                <div class="header-lefts">
                     <h1>🏷️ Kelola Kategori</h1>
                     <p>Atur kategori produk untuk memudahkan pengelolaan toko Anda</p>
                 </div>
@@ -738,7 +740,7 @@
                     @foreach ($kategori as $k)
                         <div class="category-card">
                             <div class="category-header">
-                                <div class="category-icon">👕</div>
+                                <div class="category-icon">⭐</div>
                                 <div class="category-actions">
                                     <button class="btn-icon btn-edit" data-id="{{ $k->id }}"
                                         data-nama="{{ $k->nama_kategori }}">✏️</button>
@@ -753,7 +755,7 @@
                             <div class="category-stats">
                                 <div class="category-stat">
                                     <span>📦</span>
-                                    <span> produk</span>
+                                    <span>{{ $k->products_count }} produk</span>
                                 </div>
                             </div>
                         </div>

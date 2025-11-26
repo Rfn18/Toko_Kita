@@ -52,7 +52,7 @@ class authController extends Controller
             return redirect("/");
         }
 
-        return back()->withErrors(['email' => 'Email atau password salah!']);
+        return back()->with('error', 'Email atau password salah!');
     }
 
 

@@ -30,11 +30,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
-            
-            // Generate nama file unik
             $filename = time() . '_' . $file->getClientOriginalName();
-            
-            // Simpan ke storage/app/public/products
             $path = $file->storeAs('produk', $filename, 'public');
         }
 
@@ -73,10 +69,7 @@ class ProductController extends Controller
 
         $product->update($request->all());
 
-        return response()->json([
-            'message' => 'Produk berhasil diperbarui',
-            'data'    => $product
-        ]);
+        return redirect()->route('admin.produk.index')->with('success', 'User Edited successfuly');
     }
 
     // Hapus produk

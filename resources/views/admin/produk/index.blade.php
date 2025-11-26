@@ -12,6 +12,17 @@
 </head>
 
 <body>
+    @if (session('success') || session('error'))
+        <div class="toast show" id="toast">
+            <span class="toast-icon" id="toastIcon">
+                {{ session('success') ? '✓' : '❌' }}
+            </span>
+
+            <span class="toast-message" id="toastMessage">
+                {{ session('success') ?? session('error') }}
+            </span>
+        </div>
+    @endif
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">🏪</div>
@@ -45,27 +56,7 @@
         </div>
     </div>
     <div class="main-content">
-        <div class="header">
-            <div class="header-left">
-                <div class="toggle-sidebar" id="toggleSidebar">☰</div>
-                <h1 class="page-title" id="pageTitle">Dashboard</h1>
-            </div>
-            <div class="header-right">
-                <div class="notification-icon">
-                    🔔
-                    <span class="notification-badge">3</span>
-                </div>
-                <div class="dropdown">
-                    <div class="user-profile" data-bs-toggle="dropdown">
-                        <div class="user-avatar">👤</div>
-                        <div class="user-name">Admin UMKM</div>
-                    </div>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        @include('admin.header')
         <div class="content page" id="productsPage">
             <div class="success-banner" id="successBanner">
                 <span class="success-banner-icon">✓</span>
@@ -102,7 +93,7 @@
                                             alt="gambar" style="width: 100%; border-radius: 10px"></div>
                                 </td>
                                 <td>{{ $p->nama_produk }}</td>
-                                <td>Rp {{ $p->harga }}</td>
+                                <td>Rp {{ number_format($p->harga) }}</td>
                                 <td>{{ $p->stok }}</td>
                                 <td><span class="category-badge makanan">{{ $p->kategori->nama_kategori }}</span>
                                 </td>
