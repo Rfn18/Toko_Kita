@@ -725,14 +725,14 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <div class="header-left">
-            <div class="logo">🏪 TokoKita</div>
-            <div class="search-bar">
-                <input type="text" placeholder="Cari produk UMKM...">
-                <span class="search-icon">🔍</span>
-            </div>
-        </div>
         @auth
+            <div class="header-left">
+                <div class="logo">🏪 TokoKita</div>
+                <div class="search-bar">
+                    <input type="text" placeholder="Cari produk UMKM...">
+                    <span class="search-icon">🔍</span>
+                </div>
+            </div>
             <div class="header-right">
                 <a href="{{ url('/keranjang') }}" style='text-decoration: none;'>
                     <div class="header-icon cart-icon">
@@ -745,21 +745,29 @@
                 </a>
             </div>
         @else
-            <div class="header-right">
-
-                <div class="header-icon cart-icon">
-                    🛒
-                    <span class="cart-badge">3</span>
-                </div>
-
-                <div class="header-icon">👤</div>
-
+            <div class="header-left">
+                <div class="logo">🏪 TokoKita</div>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Cari produk UMKM...">
+                <span class="search-icon">🔍</span>
             </div>
         @endauth
     </div>
 
     <!-- Main Container -->
     <div class="main-container">
+        {{-- @if (session('success') || session('error'))
+            <div class="toast show" id="toast">
+                <span class="toast-icon" id="toastIcon">
+                    {{ session('success') ? '✓' : '❌' }}
+                </span>
+
+                <span class="toast-message" id="toastMessage">
+                    {{ session('success') ?? session('error') }}
+                </span>
+            </div>
+        @endif --}}
         <!-- Left Side - Images -->
         <div class="left-side">
             <div class="image-slider">
@@ -803,8 +811,8 @@
             <div class="seller-section">
                 <div class="seller-avatar">🏪</div>
                 <div class="seller-info">
-                    <div class="seller-name">Toko Kue Bu Sari</div>
-                    <div class="seller-location">📍 Bandung, Jawa Barat</div>
+                    <div class="seller-name">Admin TokoKita</div>
+                    <div class="seller-location">📍 Kediri, Jawa Timur</div>
                 </div>
                 <button class="visit-store-btn">Kunjungi Toko</button>
             </div>
@@ -910,13 +918,20 @@
         // === Increment ===
         increaseBtn.addEventListener("click", () => {
             let qty = parseInt(qtyValue.textContent);
-            qtyValue.textContent = qty + 1;
+            const jumlahStok = @json($produk->stok);
+
+            if (qty < jumlahStok) {
+                qtyValue.textContent = qty + 1;
+            } else {
+                increaseBtn.disabled = true;
+            }
         });
 
         // === Decrement ===
         decreaseBtn.addEventListener("click", () => {
             let qty = parseInt(qtyValue.textContent);
             if (qty > 1) qtyValue.textContent = qty - 1;
+            increaseBtn.disabled = false;
         });
 
         // === Add To Cart ===

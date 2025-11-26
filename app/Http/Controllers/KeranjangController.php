@@ -17,7 +17,10 @@ class KeranjangController extends Controller
                         ->sum(function ($item) {
                             return $item->product->harga * $item->jumlah;
                         });
-        return view('customer.cart', compact('keranjang', 'subtotal'));
+        $countItems = Keranjang::get()->sum(function ($item) {
+                            return $item->jumlah;
+                        });
+        return view('customer.cart', compact('keranjang', 'subtotal', 'countItems'));
     }
 
     // Tambah item ke keranjang
@@ -43,33 +46,34 @@ class KeranjangController extends Controller
 
     public function tambahBanyak(Request $request)
     {       
-    $request->validate([
-        'product_id' => 'required|exists:products,id',
-        'qty' => 'required|integer|min:1'
-    ]);
-
-    $product_id = $request->product_id;
-    $qty = $request->qty;
-
-    $keranjang = Keranjang::where('user_id', Auth::id())
-                            ->where('product_id', $product_id)
-                            ->first();
-
-    if ($keranjang) {
-        // Tambahkan sesuai jumlah yg dipilih
-        $keranjang->jumlah += $qty;
-        $keranjang->save();
-    } else {
-        // Buat baru dengan jumlah sesuai qty
-        Keranjang::create([
-            'user_id' => Auth::id(),
-            'product_id' => $product_id,
-            'jumlah' => $qty
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'qty' => 'required|integer|min:1'
         ]);
-    }
 
-    return redirect()->back()->with('success', `Berhasil menambahkan ke keranjang ${$qty} pcs`);
-}
+        $product_id = $request->product_id;
+        $qty = $request->qty;
+
+        $keranjang = Keranjang::where('user_id', Auth::id())
+                                ->where('product_id', $product_id)
+                                ->first();
+
+        if ($keranjang) {
+            $keranjang->jumlah += $qty;
+            $keranjang->save();
+        } else {
+            Keranjang::create([
+                'user_id' => Auth::id(),
+                'product_id' => $product_id,
+                'jumlah' => $qty
+            ]);
+        }
+
+       return response()->json([
+            'success' => true,
+            'message' => 'Berhasil tambah keranjang'
+        ]);
+    }   
 
 
     public function minJumlah($id) {

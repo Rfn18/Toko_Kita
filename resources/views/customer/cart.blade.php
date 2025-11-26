@@ -529,7 +529,7 @@
         <div class="back-btn" onclick="goBack()">←</div>
         <div class="header-title">
             <h1>Keranjang Belanja</h1>
-            <p id="itemCount">3 produk</p>
+            <p id="itemCount">{{ $countItems }} Barang</p>
         </div>
     </div>
 
@@ -562,7 +562,8 @@
                                 @csrf
 
                                 <input type="hidden" name="product_id" value="{{ $k->product->id }}">
-                                <button type="submit" class="qty-btn">+</button>
+                                <button type="submit" class="qty-btn"
+                                    {{ $k->jumlah >= $k->product->stok ? 'disabled' : '' }}>+</button>
                             </form>
                         </div>
                         <div class="item-subtotal">
@@ -619,42 +620,10 @@
     </div>
 
     <script>
-        function browseProducts() {
-            showToast('🏪', 'Kembali ke halaman produk...');
-            // In real app, navigate to products page
-            // window.location.href = '/products';
-        }
-
         // Go back
         function goBack() {
             window.location.href = '/'
         }
-
-        // Initial render
-        renderCart();
-
-        // Demo: Test empty cart
-        function testEmptyCart() {
-            cartItems = [];
-            renderCart();
-        }
-
-        // Demo: Add sample item
-        function addSampleItem() {
-            const newItem = {
-                id: Date.now(),
-                name: 'Batik Modern Premium',
-                price: 125000,
-                quantity: 1,
-                image: '👕'
-            };
-            cartItems.push(newItem);
-            renderCart();
-            showToast('✓', 'Produk ditambahkan ke keranjang');
-        }
-
-        // Add demo buttons for testing (optional)
-        // console.log('Demo functions: testEmptyCart(), addSampleItem()');
     </script>
 </body>
 
