@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kategoris;
+use App\Models\Keranjang;
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
 {
     public function index()
     {
-        $kategori = Kategoris::all();
+        $kategori = Kategoris::withCount('products')->get();
         return view("products.kategori.index", compact('kategori'));
     }
 
@@ -26,7 +27,12 @@ class KategoriController extends Controller
 
     public function show($id)
     {
-        return response()->json(Kategoris::with('products')->findOrFail($id));
+        $kategori = Kategoris::with('products')->findOrFail($id);
+        $detailKategori = Kategoris::withCount('products')->findOrFail($id);
+        $countItems = Keranjang::get()->sum(function ($item) {
+                            return $item->jumlah;
+                        });
+        return view('products.kategori.detail', compact('kategori', 'detailKategori', 'countItems'));
     }
 
     public function update(Request $request, $id)

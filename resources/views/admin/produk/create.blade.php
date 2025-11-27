@@ -73,7 +73,8 @@
             <div class="form-container">
                 <h2 class="form-title">Tambah Produk Baru</h2>
 
-                <form id="addProductForm" action="/admin/produk/create" method="POST" enctype="multipart/form-data">
+                <form id="addProductForm" action="{{ route('admin.produk.store') }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label class="form-label">Foto Produk <span class="required">*</span></label>

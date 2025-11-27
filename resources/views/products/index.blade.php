@@ -29,6 +29,7 @@
         <h3 class="section-title">Kategori Produk</h3>
         <div class="categories">
             <div class="category-card">
+                <a href="/kategori/"></a>
                 <div class="category-icon">👕</div>
                 <div class="category-name">Kaos</div>
             </div>

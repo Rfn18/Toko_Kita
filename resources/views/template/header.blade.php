@@ -47,6 +47,10 @@
         font-weight: bold;
     }
 
+    form {
+        max-width: 100%;
+    }
+
     .search-bar {
         flex: 1;
         max-width: 500px;
@@ -237,6 +241,10 @@
         font-weight: 600;
         color: #2c3e50;
         margin-bottom: 8px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        -webkit-line-clamp: 1;
     }
 
     .product-price {
@@ -394,8 +402,10 @@
         <div class="header-content">
             <div class="logo">🏪 TokoKita</div>
             <div class="search-bar">
-                <input type="text" placeholder="Cari produk UMKM...">
-                <span class="search-icon">🔍</span>
+                <form action="{{ route('products.search') }}" method="GET">
+                    <input type="text" name="nama" placeholder="Cari produk UMKM..." required>
+                    <span class="search-icon">🔍</span>
+                </form>
             </div>
             @auth
                 <div class="cart-icon">

@@ -7,10 +7,12 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CheckoutController;
 use App\Middleware\AdminMiddleware;
 
 Route::get('/', [ProductController::class, 'index'])->name('home');
 Route::apiResource('produk', ProductController::class);
+Route::get("/search", [ProductController::class, "search"])->name('products.search');
 
 // Auth
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -51,6 +53,10 @@ Route::middleware(['auth'])->group(function() {
 
      // Profile
      Route::get("/profile", [UserController::class, 'index'])->name('customer.profile');
+
+     // Checkout
+     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 });
 
 Route::apiResource('kategori', KategoriController::class);

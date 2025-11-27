@@ -1,12 +1,16 @@
 <div class="bottom-nav">
-    <div class="nav-item active">
-        <div class="nav-icon">🏠</div>
-        <div class="nav-label">Home</div>
-    </div>
-    <div class="nav-item">
-        <div class="nav-icon">📦</div>
-        <div class="nav-label">Kategori</div>
-    </div>
+    <a href="{{ url('/') }}">
+        <div class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Home</div>
+        </div>
+    </a>
+    <a href="{{ url('/kategori') }}">
+        <div class="nav-item">
+            <div class="nav-icon">📦</div>
+            <div class="nav-label">Kategori</div>
+        </div>
+    </a>
     @auth
         <a href="{{ url('/keranjang') }}">
             <div class="nav-item">

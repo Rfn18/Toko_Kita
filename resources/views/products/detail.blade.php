@@ -719,6 +719,63 @@
             text-align: center;
         }
     }
+
+    .right-side-top {
+        display: flex;
+        width: 100%;
+        justify-content: space-between
+    }
+
+    .back-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        background: #f8f9fa;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+    }
+
+    .back-btn:hover {
+        background: #e0e0e0;
+    }
+
+    /* Loading State */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 300;
+    }
+
+    .loading-overlay.show {
+        display: flex;
+    }
+
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
 </style>
 </head>
 
@@ -737,7 +794,7 @@
                 <a href="{{ url('/keranjang') }}" style='text-decoration: none;'>
                     <div class="header-icon cart-icon">
                         🛒
-                        <span class="cart-badge">3</span>
+                        <span class="cart-badge">{{ $countItems }}</span>
                     </div>
                 </a>
                 <a href="{{ url('/profile') }}" style='text-decoration: none;'>
@@ -756,8 +813,9 @@
     </div>
 
     <!-- Main Container -->
+
     <div class="main-container">
-        {{-- @if (session('success') || session('error'))
+        @if (session('success') || session('error'))
             <div class="toast show" id="toast">
                 <span class="toast-icon" id="toastIcon">
                     {{ session('success') ? '✓' : '❌' }}
@@ -767,7 +825,7 @@
                     {{ session('success') ?? session('error') }}
                 </span>
             </div>
-        @endif --}}
+        @endif
         <!-- Left Side - Images -->
         <div class="left-side">
             <div class="image-slider">
@@ -779,11 +837,14 @@
             </div>
         </div>
         <div class="right-side">
-            <div class="breadcrumb">
-                <a href="/">Home</a> / <a href="#">{{ $produk->kategori->nama_kategori }}</a>
-                /<span>{{ $produk->nama_produk }}</span>
-            </div>
+            <div class="right-side-top">
 
+                <div class="breadcrumb">
+                    <a href="/">Home</a> / <a href="/produk">produk</a>
+                    /<span>{{ $produk->id }}</span>
+                </div>
+                <button class="back-btn" onclick="goBack()">←</button>
+            </div>
             <span class="category-badge">{{ $produk->kategori->nama_kategori }}</span>
 
             <h1 class="product-name">{{ $produk->nama_produk }}</h1>
@@ -904,8 +965,14 @@
             </div>
         </div>
     </div>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
 </body>
 <script>
+    function goBack() {
+        window.history.back()
+    }
     document.addEventListener("DOMContentLoaded", () => {
 
         const decreaseBtn = document.getElementById("decreaseBtn");
@@ -934,28 +1001,32 @@
             increaseBtn.disabled = false;
         });
 
-        // === Add To Cart ===
         addToCartBtn.addEventListener("click", () => {
 
             const qty = parseInt(qtyValue.textContent);
-
-            fetch("/keranjang/addMany", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": csrfToken
-                    },
-                    body: JSON.stringify({
-                        product_id: productId,
-                        qty: qty
+            try {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                loadingOverlay.classList.add('show');
+                fetch("/keranjang/addMany", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": csrfToken
+                        },
+                        body: JSON.stringify({
+                            product_id: productId,
+                            qty: qty
+                        })
                     })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    alert("Berhasil masuk keranjang (" + qty + " pcs)");
-                })
-                .catch(err => console.error(err));
+                    .then(res => res.json())
+                    .then(data => {
+                        loadingOverlay.classList.remove('show');
+                        console.log(data);
+                    })
+                    .catch(err => console.error(err));
+            } catch (err) {
+                console.err(err)
+            }
         });
 
     });

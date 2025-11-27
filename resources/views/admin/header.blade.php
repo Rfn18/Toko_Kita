@@ -14,7 +14,8 @@
                  <div class="user-name">Admin UMKM</div>
              </div>
              <ul class="dropdown-menu">
-                 <li><a class="dropdown-item" href="{{ url('/logout') }}">Logout</a></li>
+                 <li><a class="dropdown-item" href="{{ url('/logout') }}">Logout</a><i
+                         class="fa-solid fa-arrow-right-from-bracket"></i></li>
              </ul>
          </div>
      </div>

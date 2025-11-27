@@ -6,6 +6,8 @@ use App\Models\Kategoris;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Keranjang;
+use App\Models\Checkout;
 
 class AdminController extends Controller
 {
@@ -13,8 +15,10 @@ class AdminController extends Controller
         $total_user = User::count();
         $total_product = Product::count();
         $total_stok = Product::sum('stok');
+        $total_keranjang = Keranjang::sum('jumlah')     ;
+        $total_pendapatan = Checkout::sum('total_harga');
 
-        return view("admin.dashboard", compact('total_user', 'total_product', 'total_stok'));
+        return view("admin.dashboard", compact('total_user', 'total_product', 'total_stok', 'total_keranjang', 'total_pendapatan'));
     }
 
     // Produk

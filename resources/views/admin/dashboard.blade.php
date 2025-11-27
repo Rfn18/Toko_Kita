@@ -61,22 +61,30 @@
                     <div class="stat-icon">📦</div>
                 </div>
                 <div class="stat-card orange">
-                    <div class="stat-info">
-                        <h3>{{ $total_stok }}</h3>
-                        <p>Stok Hampir Habis</p>
-                    </div>
-                    <div class="stat-icon">⚠️</div>
+                    @if ($total_stok < 5)
+                        <div class="stat-info">
+                            <h3>{{ $total_stok }}</h3>
+                            <p>Stok Hampir Habis</p>
+                        </div>
+                        <div class="stat-icon">⚠️</div>
+                    @elseif ($total_stok >= 5)
+                        <div class="stat-info">
+                            <h3>{{ $total_stok }}</h3>
+                            <p>Stok Tersisa</p>
+                        </div>
+                        <div class="stat-icon">🧩</div>
+                    @endif
                 </div>
                 <div class="stat-card green">
                     <div class="stat-info">
-                        <h3>Rp 2,4 Jt</h3>
-                        <p>Penjualan Hari Ini</p>
+                        <h3>Rp {{ number_format($total_pendapatan) }}</h3>
+                        <p>Total Penjualan</p>
                     </div>
                     <div class="stat-icon">💰</div>
                 </div>
                 <div class="stat-card purple">
                     <div class="stat-info">
-                        <h3>45</h3>
+                        <h3>{{ $total_keranjang }}</h3>
                         <p>Pesanan Aktif</p>
                     </div>
                     <div class="stat-icon">🛒</div>
