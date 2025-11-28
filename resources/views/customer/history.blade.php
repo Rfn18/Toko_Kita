@@ -581,7 +581,43 @@
 
     <!-- Content -->
     <div class="content" id="ordersList">
-        <!-- Orders will be rendered here -->
+        @if ($checkouts->isEmpty())
+            <div class="empty-state">
+                <div class="empty-icon">📦</div>
+                <h2 class="empty-title">Belum Ada Pesanan</h2>
+                <p class="empty-text">Yuk mulai belanja dan dukung UMKM lokal!</p>
+                <button class="btn-browse" onclick="home()">
+                    <span>🏪</span>
+                    <span>Mulai Belanja</span>
+                </button>
+            </div>
+        @else
+            @foreach ($checkouts as $c)
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-id">TK-{{ $c->id }}</div>
+                        <div class="order-date">{{ $c->created_at }}</div>
+                    </div>
+                    <div class="order-body">
+                        <div class="order-image"><img src="{{ asset('storage/' . $c->gambar) }}"
+                                alt="{{ $c->nama_procuk }}"></div>
+                        <div class="order-details">
+                            <div class="order-name">${order.product}</div>
+                            <div class="order-items">${order.items} item</div>
+                            <div class="order-price">${formatPrice(order.price)}</div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-status ${statusConfig[order.status].class}">
+                            ${statusConfig[order.status].label}
+                        </div>
+                        <button class="btn-detail" onclick="event.stopPropagation(); showDetail('${order.id}')">
+                            Detail →
+                        </button>
+                    </div>
+                </div>
+            @endforeach
+        @endif
     </div>
 
     @include('template.bottomNav')
@@ -594,7 +630,7 @@
                 <button class="modal-close" onclick="closeDetail()">✕</button>
             </div>
             <div class="modal-body" id="modalBody">
-                <!-- Detail content will be inserted here -->
+
             </div>
         </div>
     </div>
@@ -708,43 +744,22 @@
 
             if (filtered.length === 0) {
                 ordersList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">📦</div>
-                        <h2 class="empty-title">Belum Ada Pesanan</h2>
-                        <p class="empty-text">Yuk mulai belanja dan dukung UMKM lokal!</p>
-                        <button class="btn-browse" onclick="navigate('home')">
-                            <span>🏪</span>
-                            <span>Mulai Belanja</span>
-                        </button>
-                    </div>
-                `;
+                <div class="empty-state">
+                    <div class="empty-icon">📦</div>
+                    <h2 class="empty-title">Belum Ada Pesanan</h2>
+                    <p class="empty-text">Yuk mulai belanja dan dukung UMKM lokal!</p>
+                    <button class="btn-browse" onclick="navigate('home')">
+                        <span>🏪</span>
+                        <span>Mulai Belanja</span>
+                    </button>
+                </div>
+            `;
                 return;
             }
 
             ordersList.innerHTML = filtered.map(order => `
-                <div class="order-card" onclick="showDetail('${order.id}')">
-                    <div class="order-header">
-                        <div class="order-id">${order.id}</div>
-                        <div class="order-date">${order.date}</div>
-                    </div>
-                    <div class="order-body">
-                        <div class="order-image">${order.image}</div>
-                        <div class="order-details">
-                            <div class="order-name">${order.product}</div>
-                            <div class="order-items">${order.items} item</div>
-                            <div class="order-price">${formatPrice(order.price)}</div>
-                        </div>
-                    </div>
-                    <div class="order-footer">
-                        <div class="order-status ${statusConfig[order.status].class}">
-                            ${statusConfig[order.status].label}
-                        </div>
-                        <button class="btn-detail" onclick="event.stopPropagation(); showDetail('${order.id}')">
-                            Detail →
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+           
+        `).join('');
         }
 
         function filterOrders(status) {
@@ -882,23 +897,12 @@
             }
         });
 
-        function navigate(page) {
-            const pages = {
-                home: 'Home',
-                category: 'Kategori',
-                cart: 'Keranjang',
-                history: 'Riwayat',
-                profile: 'Profil'
-            };
-            alert(`Navigasi ke ${pages[page]}`);
-
-            // Update active nav
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+        function home() {
+            window.location = "/"
         }
 
         // Initial render
-        renderOrders();
+        // renderOrders();
     </script>
 </body>
 

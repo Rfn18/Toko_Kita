@@ -11,6 +11,7 @@ class Checkout extends Model
         'product_id',
         'jumlah',
         'total_harga',
+        'alamat',
         'status',
     ];
 

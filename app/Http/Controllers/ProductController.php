@@ -7,6 +7,7 @@ use App\Models\Kategori;
 use App\Models\Kategoris;
 use App\Models\Keranjang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProductController extends Controller
@@ -73,13 +74,13 @@ class ProductController extends Controller
             'deskripsi'   => 'required',
             'harga'       => 'required|integer',
             'stok'        => 'required|integer',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120'
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120'
         ]); 
 
         if ($request->hasFile('gambar')) {
 
-            if($produk->gambar && \Storage::disk('public')->exists($produk->gambar)) {
-                \Storage::disk('public')->delete($produk->gambar);
+            if($produk->gambar && Storage::disk('public')->exists($produk->gambar)) {
+                Storage::disk('public')->delete($produk->gambar);
             }
 
             $file = $request->file('gambar');

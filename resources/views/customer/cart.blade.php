@@ -1040,6 +1040,51 @@
         .form-textarea.error {
             border-color: #f44336;
         }
+
+        /* Success Message */
+        .toast {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: white;
+            padding: 18px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 2000;
+            animation: slideInRight 0.3s;
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success {
+            border-left: 4px solid #4caf50;
+        }
+
+        .toast-icon {
+            font-size: 24px;
+        }
+
+        .toast-message {
+            color: #2c3e50;
+            font-weight: 500;
+        }
     </style>
 </head>
 
@@ -1055,6 +1100,18 @@
 
     <!-- Cart Content -->
     <div class="cart-content" id="cartContent">
+
+        @if (session('success') || session('error'))
+            <div class="toast show" id="toast">
+                <span class="toast-icon" id="toastIcon">
+                    {{ session('success') ? '✓' : '❌' }}
+                </span>
+
+                <span class="toast-message" id="toastMessage">
+                    {{ session('success') ?? session('error') }}
+                </span>
+            </div>
+        @endif
         @foreach ($keranjang as $k)
             <div class="cart-item">
                 <div class="item-image"><img src="{{ asset('storage/' . $k->product->gambar) }}" alt="anajt"></div>
@@ -1207,17 +1264,17 @@
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Ongkos Kirim</span>
-                            <span class="summary-value">Rp 15.000</span>
+                            <span class="summary-value">Rp {{ $subtotal == null ? 'Rp. 0' : 'Rp 15.000' }}</span>
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Diskon</span>
-                            <span class="summary-value" style="color: #4caf50;">- Rp 20.000</span>
+                            <span class="summary-value" style="color: #4caf50;">- Rp 0</span>
                         </div>
                         <div class="summary-divider"></div>
                         <div class="summary-total">
                             <span class="total-label">Total Pembayaran</span>
                             <span class="total-value">
-                                Rp {{ number_format($subtotal + 15000) }}
+                                Rp {{ $subtotal == null ? '0.000' : number_format($subtotal + 15000) }}
                             </span>
                         </div>
                     </div>
@@ -1229,7 +1286,6 @@
                             <span>Alamat Pengiriman</span>
                         </h3>
                         <div class="address-card">
-                            <!-- Contoh input alamat -->
                             <input name="alamat" required placeholder="Tulis alamat lengkap..." class="form-input">
                         </div>
                     </div>

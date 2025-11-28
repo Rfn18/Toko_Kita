@@ -12,7 +12,15 @@ class CheckoutController extends Controller
 {
     public function store(Request $request)
     {
-        $user = auth()->user();
+        $user = Auth::user();
+        $request->validate([
+            'alamat' => 'required|string|max:255',
+            'items'  => 'required|array',
+            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.jumlah'     => 'required|integer|min:1',
+            'items.*.total_harga'=> 'required|numeric|min:0',
+        ]);
+
 
         foreach ($request->items as $item) {
 
@@ -30,19 +38,22 @@ class CheckoutController extends Controller
                 'product_id'   => $item['product_id'],
                 'jumlah'       => $item['jumlah'],
                 'total_harga'  => $item['total_harga'],
+                'alamat'       => $request->alamat,
                 'status'       => 'pending',
             ]);
         }
 
             Keranjang::where('user_id', $user->id)->delete();
-
-            return redirect()->route('home')->with('success', 'Checkout berhasil! Stok diperbarui dan keranjang telah dikosongkan.');
+            
+            
+            return redirect()->back()->with('success', 'Checkout berhasil!');
         }
 
 
     public function index()
     {
         $checkouts = Checkout::where('user_id', Auth::id())->get();
+        $product = Checkout::where('user_id', Auth::id());
         return view('customer.history', compact('checkouts'));
     }
 }
