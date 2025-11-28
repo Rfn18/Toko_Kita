@@ -1228,15 +1228,19 @@
                             <span>📍</span>
                             <span>Alamat Pengiriman</span>
                         </h3>
-
-                        <!-- Contoh input alamat -->
-                        <textarea name="alamat" required placeholder="Tulis alamat lengkap..." class="alamat-textarea"></textarea>
+                        <div class="address-card">
+                            <!-- Contoh input alamat -->
+                            <input name="alamat" required placeholder="Tulis alamat lengkap..." class="form-input">
+                        </div>
                     </div>
 
-                    <!-- Submit -->
-                    <button type="submit" class="checkout-btn">
-                        Bayar Sekarang
-                    </button>
+                    <div class="popup-actions">
+                        <button class="btn-confirm" id="confirmBtn" type="submit">
+                            <span>🔒</span>
+                            <span>Konfirmasi & Bayar</span>
+                        </button>
+                        <button class="btn-cancel" onclick="closeCheckout()">Batal</button>
+                    </div>
 
                 </div>
             </form>

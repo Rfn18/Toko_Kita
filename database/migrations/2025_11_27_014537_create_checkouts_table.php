@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->integer('jumlah')->default(1);
             $table->decimal('total_harga', 12, 2);
+            $table->string('alamat'); 
             $table->string('status')->default('pending'); 
             $table->timestamps();
 

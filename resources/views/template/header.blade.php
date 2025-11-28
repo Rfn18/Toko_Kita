@@ -319,6 +319,11 @@
         font-size: 12px;
     }
 
+    .bottom-nav a {
+        text-decoration: none;
+        color: #000
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
         .banner {

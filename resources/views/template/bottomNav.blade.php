@@ -1,6 +1,6 @@
 <div class="bottom-nav">
     <a href="{{ url('/') }}">
-        <div class="nav-item active">
+        <div class="nav-item">
             <div class="nav-icon">🏠</div>
             <div class="nav-label">Home</div>
         </div>
@@ -18,10 +18,12 @@
                 <div class="nav-label">Keranjang</div>
             </div>
         </a>
-        <div class="nav-item">
-            <div class="nav-icon">📜</div>
-            <div class="nav-label">Riwayat</div>
-        </div>
+        <a href="{{ url('/riwayat') }}">
+            <div class="nav-item">
+                <div class="nav-icon">📜</div>
+                <div class="nav-label">Riwayat</div>
+            </div>
+        </a>
         <a href="{{ url('/profile') }}">
             <div class="nav-item">
                 <div class="nav-icon">👤</div>

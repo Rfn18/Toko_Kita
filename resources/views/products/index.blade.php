@@ -28,23 +28,30 @@
         <!-- Kategori Produk -->
         <h3 class="section-title">Kategori Produk</h3>
         <div class="categories">
-            <div class="category-card">
-                <a href="/kategori/"></a>
-                <div class="category-icon">👕</div>
-                <div class="category-name">Kaos</div>
-            </div>
-            <div class="category-card">
-                <div class="category-icon">🧥</div>
-                <div class="category-name">Hoodie</div>
-            </div>
-            <div class="category-card">
-                <div class="category-icon">🥼</div>
-                <div class="category-name">Jaket</div>
-            </div>
-            <div class="category-card">
-                <div class="category-icon">👟</div>
-                <div class="category-name">Sepatu</div>
-            </div>
+            <a href="/kategori/1" style="text-decoration: none">
+                <div class="category-card">
+                    <div class="category-icon">👕</div>
+                    <div class="category-name">Kaos</div>
+                </div>
+            </a>
+            <a href="/kategori/6" style="text-decoration: none">
+                <div class="category-card">
+                    <div class="category-icon">🧥</div>
+                    <div class="category-name">Hoodie</div>
+                </div>
+            </a>
+            <a href="/kategori/7" style="text-decoration: none">
+                <div class="category-card">
+                    <div class="category-icon">🥼</div>
+                    <div class="category-name">Jaket</div>
+                </div>
+            </a>
+            <a href="/kategori/8" style="text-decoration: none">
+                <div class="category-card">
+                    <div class="category-icon">👟</div>
+                    <div class="category-name">Sepatu</div>
+                </div>
+            </a>
         </div>
 
         <!-- Produk Unggulan -->

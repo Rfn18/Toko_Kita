@@ -43,6 +43,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {
      Route::delete('kategori/delete/{id}', [KategoriController::class, 'destroy'])->name('admin.kategori.delete');
 });
 
+// Middleware Customer
 Route::middleware(['auth'])->group(function() {
      // Keranjang
      Route::get("/keranjang", [KeranjangController::class, 'index'])->name('customer.keranjang');
@@ -56,7 +57,7 @@ Route::middleware(['auth'])->group(function() {
 
      // Checkout
      Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+     Route::get('/riwayat', [CheckoutController::class, 'index'])->name('checkout.index');
 });
 
 Route::apiResource('kategori', KategoriController::class);

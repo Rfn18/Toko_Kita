@@ -74,7 +74,7 @@ class ProductController extends Controller
             'harga'       => 'required|integer',
             'stok'        => 'required|integer',
             'gambar' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120'
-        ]);
+        ]); 
 
         if ($request->hasFile('gambar')) {
 
