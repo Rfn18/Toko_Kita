@@ -40,4 +40,9 @@ class AdminController extends Controller
 
         return view("admin.kategori.index", compact('kategori'));
     }
+    // Checkout
+    public function checkout() {
+        $checkout = Checkout::with('product', 'user')->get();
+        return view('admin.report', compact('checkout'));
+    }
 }

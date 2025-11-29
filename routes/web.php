@@ -41,6 +41,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {
      Route::post('/kategori/create', [KategoriController::class, 'store'])->name('admin.kategori.store');;
      Route::put('/kategori/update/{id}', [KategoriController::class, 'update'])->name('admin.kategori.update');;
      Route::delete('kategori/delete/{id}', [KategoriController::class, 'destroy'])->name('admin.kategori.delete');
+
+     // Chcekout Report
+     Route::get('/laporan', [AdminController::class, 'checkout'])->name('.admin.report');
 });
 
 // Middleware Customer

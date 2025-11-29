@@ -168,6 +168,13 @@
             flex-shrink: 0;
         }
 
+        .order-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center
+        }
+
         .order-details {
             flex: 1;
         }
@@ -593,23 +600,27 @@
             </div>
         @else
             @foreach ($checkouts as $c)
+                @php
+                    $dates = explode(' ', $c->created_at);
+                    $date = $dates[0];
+                @endphp
                 <div class="order-card">
                     <div class="order-header">
                         <div class="order-id">TK-{{ $c->id }}</div>
-                        <div class="order-date">{{ $c->created_at }}</div>
+                        <div class="order-date">{{ $date }}</div>
                     </div>
                     <div class="order-body">
-                        <div class="order-image"><img src="{{ asset('storage/' . $c->gambar) }}"
+                        <div class="order-image"><img src="{{ asset('storage/' . $c->product->gambar) }}"
                                 alt="{{ $c->nama_procuk }}"></div>
                         <div class="order-details">
-                            <div class="order-name">${order.product}</div>
-                            <div class="order-items">${order.items} item</div>
-                            <div class="order-price">${formatPrice(order.price)}</div>
+                            <div class="order-name">{{ $c->product->nama_produk }}</div>
+                            <div class="order-items">{{ $c->jumlah }} item</div>
+                            <div class="order-price">Rp. {{ number_format($c->product->harga) }}</div>
                         </div>
                     </div>
                     <div class="order-footer">
-                        <div class="order-status ${statusConfig[order.status].class}">
-                            ${statusConfig[order.status].label}
+                        <div class="order-status {{ $c->status }}">
+                            {{ $c->status }}
                         </div>
                         <button class="btn-detail" onclick="event.stopPropagation(); showDetail('${order.id}')">
                             Detail →

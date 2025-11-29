@@ -52,8 +52,7 @@ class CheckoutController extends Controller
 
     public function index()
     {
-        $checkouts = Checkout::where('user_id', Auth::id())->get();
-        $product = Checkout::where('user_id', Auth::id());
+        $checkouts = Checkout::where('user_id', Auth::id())->with('product')->get();
         return view('customer.history', compact('checkouts'));
     }
 }
