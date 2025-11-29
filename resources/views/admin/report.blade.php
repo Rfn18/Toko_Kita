@@ -666,18 +666,22 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">Total Pesanan Hari Ini</div>
-                <div class="stat-value">24</div>
+                <div class="stat-value">{{ $totalCheckoutToday }}</div>
                 <div class="stat-change">
                     <span>↑</span>
-                    <span>12% dari kemarin</span>
+                    <span>{{ $reportTotal }}% dari kemarin</span>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Pending</div>
-                <div class="stat-value" style="color: #ff9800;">8</div>
+                <div class="stat-value" style="color: #ff9800;">{{ $totalPendingToday }}</div>
                 <div class="stat-change negative">
-                    <span>↓</span>
-                    <span>3 dari kemarin</span>
+                    @if ($reportPending > 1)
+                        <span>↑</span>
+                    @else
+                        <span>↓</span>
+                    @endif
+                    <span>{{ $reportPending }} dari kemarin</span>
                 </div>
             </div>
             <div class="stat-card">

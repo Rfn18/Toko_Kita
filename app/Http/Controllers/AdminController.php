@@ -15,7 +15,7 @@ class AdminController extends Controller
         $total_user = User::count();
         $total_product = Product::count();
         $total_stok = Product::sum('stok');
-        $total_keranjang = Keranjang::sum('jumlah')     ;
+        $total_keranjang = Keranjang::sum('jumlah');
         $total_pendapatan = Checkout::sum('total_harga');
 
         return view("admin.dashboard", compact('total_user', 'total_product', 'total_stok', 'total_keranjang', 'total_pendapatan'));
@@ -43,6 +43,26 @@ class AdminController extends Controller
     // Checkout
     public function checkout() {
         $checkout = Checkout::with('product', 'user')->get();
-        return view('admin.report', compact('checkout'));
+        $totalCheckoutToday = Checkout::whereDate('created_at', today())->count();
+        $totalCheckoutYesterday = Checkout::whereDate('created_at', today()->subDay())->count();
+        $totalPendingToday = Checkout::whereDate('created_at', today())->where('status', 'pending')->count();
+        $totalPendingYesterday = Checkout::whereDate('created_at', today()->subday())->where('status', 'pending')->count();
+
+        $reportTotal = floor(($totalCheckoutToday - $totalCheckoutYesterday) / $totalCheckoutToday * 100);
+        $reportPending = $totalPendingToday - $totalPendingYesterday;
+
+        return view('admin.report', compact('checkout', 'totalCheckoutToday', 'reportTotal', 'totalPendingToday', 'reportPending'));
+    }
+
+    public function checkoutEditStatus(Request $request, $id) {
+        $request = validate([
+            'status' => 'require',
+        ]);
+
+        $checkout = Checkout::find($id);
+        $checkout->status = $request->alamat;
+        $checkout->save();
+
+        return redirect()->route('admin.report')->with('success', 'Updated status successfuly');
     }
 }

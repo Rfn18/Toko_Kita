@@ -43,7 +43,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {
      Route::delete('kategori/delete/{id}', [KategoriController::class, 'destroy'])->name('admin.kategori.delete');
 
      // Chcekout Report
-     Route::get('/laporan', [AdminController::class, 'checkout'])->name('.admin.report');
+     Route::get('/laporan', [AdminController::class, 'checkout'])->name('admin.report');
 });
 
 // Middleware Customer
