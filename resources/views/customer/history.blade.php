@@ -352,6 +352,10 @@
             text-decoration: none;
             color: #000
         }
+        .bottom-nav a {
+            text-decoration: none;
+            color: #000
+        }
 
         /* Detail Modal */
         .modal {
