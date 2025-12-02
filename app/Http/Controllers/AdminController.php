@@ -47,20 +47,28 @@ class AdminController extends Controller
         $totalCheckoutYesterday = Checkout::whereDate('created_at', today()->subDay())->count();
         $totalPendingToday = Checkout::whereDate('created_at', today())->where('status', 'pending')->count();
         $totalPendingYesterday = Checkout::whereDate('created_at', today()->subday())->where('status', 'pending')->count();
+        $totalDikirimToday = Checkout::whereDate('created_at', today())->where('status', 'dikirim')->count();
+        $totalDimirimYesterday = Checkout::whereDate('created_at', today()->subday())->where('status', 'dikirim')->count();
 
-        $reportTotal = floor(($totalCheckoutToday - $totalCheckoutYesterday) / $totalCheckoutToday * 100);
+        if($totalCheckoutToday == 0 || $totalCheckoutYesterday == 0) {
+            $reportTotal = -100;
+        } else {
+
+            $reportTotal = floor(($totalCheckoutToday - $totalCheckoutYesterday) / $totalCheckoutToday * 100);
+        }
         $reportPending = $totalPendingToday - $totalPendingYesterday;
+        $reportDikirim = $totalDikirimToday - $totalDimirimYesterday;
 
-        return view('admin.report', compact('checkout', 'totalCheckoutToday', 'reportTotal', 'totalPendingToday', 'reportPending'));
+        return view('admin.report', compact('checkout', 'totalCheckoutToday', 'reportTotal', 'totalPendingToday', 'reportPending', 'totalDikirimToday' ,'reportDikirim'));
     }
 
     public function checkoutEditStatus(Request $request, $id) {
-        $request = validate([
-            'status' => 'require',
+        $request->validate([
+            'status' => 'required',
         ]);
 
         $checkout = Checkout::find($id);
-        $checkout->status = $request->alamat;
+        $checkout->status = $request->status;
         $checkout->save();
 
         return redirect()->route('admin.report')->with('success', 'Updated status successfuly');

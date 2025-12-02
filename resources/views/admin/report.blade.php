@@ -334,7 +334,7 @@
             color: #4a90e2;
         }
 
-        .status-badge.shipped {
+        .status-badge.dikirim {
             background: #e8f5e9;
             color: #4caf50;
         }
@@ -621,21 +621,27 @@
             </div>
         </div>
         <div class="sidebar-menu">
-            <div class="menu-item">
-                <span class="menu-icon">📊</span>
-                <span>Dashboard</span>
-            </div>
-            <div class="menu-item">
-                <span class="menu-icon">📦</span>
-                <span>Produk</span>
-            </div>
-            <div class="menu-item active">
-                <span class="menu-icon">🛒</span>
-                <span>Checkout</span>
-            </div>
-            <div class="menu-item">
+            <a href="{{ url('/admin/dashboard') }}" style="text-decoration: none">
+                <div class="menu-item " data-page="dashboard">
+                    <span class="menu-icon">📊</span>
+                    <span class="menu-text">Dashboard</span>
+                </div>
+            </a>
+            <a href="{{ url('/admin/produk') }}" style="text-decoration: none">
+                <div class="menu-item" data-page="products">
+                    <span class="menu-icon">📦</span>
+                    <span class="menu-text">Produk</span>
+                </div>
+            </a>
+            <a href="{{ url('/admin/kategori') }}" style="text-decoration: none">
+                <div class="menu-item" data-page="orders">
+                    <span class="menu-icon">⭐</span>
+                    <span class="menu-text">Kategori</span>
+                </div>
+            </a>
+            <div class="menu-item active" data-page="reports">
                 <span class="menu-icon">📈</span>
-                <span>Laporan</span>
+                <span class="menu-text">Laporan</span>
             </div>
             <div class="menu-item">
                 <span class="menu-icon">⚙️</span>
@@ -668,7 +674,11 @@
                 <div class="stat-label">Total Pesanan Hari Ini</div>
                 <div class="stat-value">{{ $totalCheckoutToday }}</div>
                 <div class="stat-change">
-                    <span>↑</span>
+                    @if ($reportTotal > 1)
+                        <span>↑</span>
+                    @else
+                        <span>↓</span>
+                    @endif
                     <span>{{ $reportTotal }}% dari kemarin</span>
                 </div>
             </div>
@@ -686,10 +696,14 @@
             </div>
             <div class="stat-card">
                 <div class="stat-label">Dikirim</div>
-                <div class="stat-value" style="color: #4caf50;">4</div>
+                <div class="stat-value" style="color: #4caf50;">{{ $totalDikirimToday }}</div>
                 <div class="stat-change">
-                    <span>↑</span>
-                    <span>2 dari kemarin</span>
+                    @if ($reportDikirim > 1)
+                        <span>↑</span>
+                    @else
+                        <span>↓</span>
+                    @endif
+                    <span>{{ $reportDikirim }} dari kemarin</span>
                 </div>
             </div>
         </div>
@@ -730,7 +744,38 @@
                     </tr>
                 </thead>
                 <tbody id="ordersTable">
-                    <!-- Orders will be rendered here -->
+                    @foreach ($checkout as $c)
+                        <tr>
+                            <td><span class="order-id">{{ $c->id }}</span></td>
+                            <td>
+                                <div class="user-info">
+                                    <div class="user-avatar">👤</div>
+                                    <span class="user-name">{{ $c->user->name }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="products-cell">
+                                    {{ $c->product->nama_produk }}
+                                </div>
+                            </td>
+                            <td><span class="price-cell">Rp. {{ number_format($c->total_harga) }}</span></td>
+                            @php
+                                $dates = explode(' ', $c->created_at);
+                                $date = $dates[0];
+                            @endphp
+                            <td>{{ $date }}</td>
+                            <td>
+                                <span class="status-badge {{ $c->status }}  }">
+                                    {{ $c->status }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn-change-status" onclick="openModal({{ $c->id }})">
+                                    Ubah Status
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -760,129 +805,9 @@
     </div>
 
     <script>
-        // Sample data
-        const orders = [{
-                id: 'TK-2024-024',
-                user: 'Budi Santoso',
-                products: ['🍪', '☕'],
-                total: 125000,
-                date: '29 Nov 2024',
-                status: 'pending'
-            },
-            {
-                id: 'TK-2024-023',
-                user: 'Siti Nurhaliza',
-                products: ['👕'],
-                total: 125000,
-                date: '29 Nov 2024',
-                status: 'processing'
-            },
-            {
-                id: 'TK-2024-022',
-                user: 'Ahmad Wijaya',
-                products: ['🍯', '🧴'],
-                total: 90000,
-                date: '29 Nov 2024',
-                status: 'processing'
-            },
-            {
-                id: 'TK-2024-021',
-                user: 'Dewi Kartika',
-                products: ['🌶️'],
-                total: 30000,
-                date: '28 Nov 2024',
-                status: 'shipped'
-            },
-            {
-                id: 'TK-2024-020',
-                user: 'Eko Prasetyo',
-                products: ['🧺', '🎨'],
-                total: 175000,
-                date: '28 Nov 2024',
-                status: 'processing'
-            },
-            {
-                id: 'TK-2024-019',
-                user: 'Rina Melati',
-                products: ['🍪', '🍮'],
-                total: 115000,
-                date: '28 Nov 2024',
-                status: 'pending'
-            },
-            {
-                id: 'TK-2024-018',
-                user: 'Agus Firmansyah',
-                products: ['☕'],
-                total: 35000,
-                date: '27 Nov 2024',
-                status: 'shipped'
-            },
-            {
-                id: 'TK-2024-017',
-                user: 'Linda Kusuma',
-                products: ['🍯', '🧴', '🌶️'],
-                total: 120000,
-                date: '27 Nov 2024',
-                status: 'processing'
-            },
-        ];
-
-        let currentOrderId = null;
-        let filteredOrders = [...orders];
-
-        const statusLabels = {
-            pending: {
-                label: '⏳ Pending',
-                class: 'pending'
-            },
-            processing: {
-                label: '⚙️ Diproses',
-                class: 'processing'
-            },
-            shipped: {
-                label: '🚚 Dikirim',
-                class: 'shipped'
-            }
-        };
-
         function formatPrice(price) {
-            return 'Rp ' + price.toLocaleString('id-ID');
+            return 'Rp ' + price.toLocaleString('id-ID')
         }
-
-        function renderOrders() {
-            const tbody = document.getElementById('ordersTable');
-
-            tbody.innerHTML = filteredOrders.map(order => `
-                <tr>
-                    <td><span class="order-id">${order.id}</span></td>
-                    <td>
-                        <div class="user-info">
-                            <div class="user-avatar">👤</div>
-                            <span class="user-name">${order.user}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="products-cell">
-                            ${order.products.slice(0, 2).map(p => `<div class="product-thumb">${p}</div>`).join('')}
-                            ${order.products.length > 2 ? `<span class="products-more">+${order.products.length - 2}</span>` : ''}
-                        </div>
-                    </td>
-                    <td><span class="price-cell">${formatPrice(order.total)}</span></td>
-                    <td>${order.date}</td>
-                    <td>
-                        <span class="status-badge ${statusLabels[order.status].class}">
-                            ${statusLabels[order.status].label}
-                        </span>
-                    </td>
-                    <td>
-                        <button class="btn-change-status" onclick="openModal('${order.id}')">
-                            Ubah Status
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
         // Search
         document.getElementById('searchInput').addEventListener('input', function() {
             const query = this.value.toLowerCase();
@@ -909,44 +834,54 @@
             renderOrders();
         }
 
+        function splitDate(date) {
+            const dates = date.split('T');
+            const time = dates[0]
+            return time;
+        }
+
+        let currentId;
         // Modal
-        function openModal(orderId) {
-            currentOrderId = orderId;
-            const order = orders.find(o => o.id === orderId);
-            if (!order) return;
+        function openModal(id) {
+            const checkout = @json($checkout);
+
+            if (!checkout) return;
+            currentId = id
+            const order = checkout.find(o => o.id === id);
 
             const modalBody = document.getElementById('modalBody');
             modalBody.innerHTML = `
-                <div class="detail-section">
-                    <div class="detail-title">Detail Pesanan</div>
-                    <div class="detail-row">
-                        <span class="detail-label">ID Order</span>
-                        <span class="detail-value">${order.id}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Pelanggan</span>
-                        <span class="detail-value">${order.user}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Total Pembayaran</span>
-                        <span class="detail-value" style="color: #ff6b35;">${formatPrice(order.total)}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Tanggal</span>
-                        <span class="detail-value">${order.date}</span>
-                    </div>
+            <div class="detail-section">
+                <div class="detail-title">Detail Pesanan</div>
+                <div class="detail-row">
+                    <span class="detail-label">ID Order</span>
+                    <span class="detail-value">${order.id}</span>
                 </div>
+                <div class="detail-row">
+                    <span class="detail-label">Pelanggan</span>
+                    <span class="detail-value">${order.user.name}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Total Pembayaran</span>
+                    <span class="detail-value" style="color: #ff6b35;">${formatPrice(order.total_harga)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Tanggal</span>
+                    <span class="detail-value">${splitDate(order.created_at)}</span>
+                </div>
+            </div>
 
-                <div class="detail-section">
-                    <div class="detail-title">Ubah Status Pesanan</div>
-                    <select class="status-select" id="newStatus">
-                        <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>⏳ Pending - Menunggu Pembayaran</option>
-                        <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>⚙️ Diproses - Pesanan Sedang Dikemas</option>
-                        <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>🚚 Dikirim - Pesanan Dalam Perjalanan</option>
+            <div class="detail-section">
+                <div class="detail-title">Ubah Status Pesanan</div>
+                <form id="updateForm" method="POST">
+                @csrf
+                    <select class="status-select" id="newStatus" name="status">
+                        <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>⏳ Pending - Menunggu antrian</option>
+                        <option value="dikirim" ${order.status === 'dikirim' ? 'selected' : ''}>🚚 Dikirim - Pesanan Dalam Perjalanan</option>
                     </select>
-                </div>
-            `;
-
+                </form>
+            </div>
+        `;
             document.getElementById('statusModal').classList.add('show');
             document.body.style.overflow = 'hidden';
         }
@@ -956,16 +891,11 @@
             document.body.style.overflow = '';
         }
 
-        function saveStatus() {
-            const newStatus = document.getElementById('newStatus').value;
-            const order = orders.find(o => o.id === currentOrderId);
 
-            if (order) {
-                order.status = newStatus;
-                renderOrders();
-                closeModal();
-                showToast(`✓ Status pesanan ${currentOrderId} berhasil diubah menjadi ${statusLabels[newStatus].label}`);
-            }
+        function saveStatus() {
+            const form = document.getElementById('updateForm');
+            form.action = `{{ url('/admin/laporan/update') }}/${currentId}`;
+            form.submit();
         }
 
         // Toast

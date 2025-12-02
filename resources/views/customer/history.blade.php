@@ -227,7 +227,7 @@
             color: #4a90e2;
         }
 
-        .order-status.shipped {
+        .order-status.dikirim {
             background: #e8f5e9;
             color: #66bb6a;
         }

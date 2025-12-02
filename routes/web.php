@@ -44,6 +44,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {
 
      // Chcekout Report
      Route::get('/laporan', [AdminController::class, 'checkout'])->name('admin.report');
+     Route::post('/laporan/update/{id}', [AdminController::class, 'checkoutEditStatus'])->name('admin.report.update');
 });
 
 // Middleware Customer

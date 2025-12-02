@@ -697,10 +697,12 @@
                 <span class="menu-icon">⭐</span>
                 <span class="menu-text">kategori</span>
             </div>
-            <div class="menu-item" data-page="reports">
-                <span class="menu-icon">📈</span>
-                <span class="menu-text">Laporan</span>
-            </div>
+             <a href="{{ url('/admin/laporan') }}" style="text-decoration: none">
+                <div class="menu-item" data-page="reports">
+                    <span class="menu-icon">📈</span>
+                    <span class="menu-text">Laporan</span>
+                </div>
+            </a>
             <div class="menu-item" data-page="settings">
                 <span class="menu-icon">⚙️</span>
                 <span class="menu-text">Pengaturan</span>
