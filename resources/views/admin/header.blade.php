@@ -12,6 +12,10 @@
              🔔
              <span class="notification-badge">3</span>
          </div>
+         <div class="notification-icon">
+             🔔
+             <span class="notification-badge">3</span>
+         </div>
          <div class="dropdown">
              <div class="user-profile" data-bs-toggle="dropdown">
                  <div class="user-avatar">👤</div>
